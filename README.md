@@ -27,7 +27,7 @@ A time tracking application designed for companies to monitor and manage rendere
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/rekasa7000/Logcha.git
    cd Logcha
    ```
 
