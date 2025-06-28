@@ -3,8 +3,8 @@ frontend/node_modules
 frontend/dist
 frontend/dist-ssr
 frontend/*.local
-frontend/count.txt
 frontend/.env
 frontend/.output
 frontend/.vinxi
-frontend/count.txt
+frontend/.vscode
+frontend/.tanstack
