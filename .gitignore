@@ -1,0 +1,10 @@
+frontend/node_modules
+.DS_Store
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
+frontend/count.txt
+frontend/.env
+frontend/.output
+frontend/.vinxi
+frontend/count.txt
