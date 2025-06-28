@@ -34,14 +34,13 @@ A time tracking application designed for companies to monitor and manage rendere
 2. Backend setup:
 
    ```bash
-   cd backend
    go mod tidy
    go run main.go
    ```
 
 3. Frontend setup:
    ```bash
-   cd frontend
+   cd client
    npm install
    npm run dev
    ```
@@ -50,8 +49,11 @@ A time tracking application designed for companies to monitor and manage rendere
 
 ```
 Logcha/
- backend/          # Go backend with Fiber
- frontend/         # React frontend with TanStack
+ client/           # React frontend with TanStack
+ main.go           # Go backend with Fiber
+ go.mod
+ go.sum
+ air.toml          # Air configuration for auto-restart
  README.md
 ```
 

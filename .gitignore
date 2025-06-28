@@ -3,28 +3,36 @@
 .env
 node_modules
 
+# Go build output
+*.exe
+*.out
+/bin/
+/tmp
+
+# Go vendor directory
+vendor/
+
+# Go test files
+_test
+_obj
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
 *.so
 
-# Folders
-_obj
-_test
-vendor/
+# Go coverage files
+*.cov
+coverage.out
+
+# Go mod cache
+go.sum.bak
 
 # logs
 *.log
 
-*.exe
-*.out
-
-/bin/
-*.out
-/tmp
-
+# React/Node.js
 client/node_modules
-.DS_Store
 client/dist
 client/dist-ssr
 client/*.local
@@ -33,3 +41,25 @@ client/.output
 client/.vinxi
 client/.vscode
 client/.tanstack
+
+# Build outputs
+client/build
+client/coverage
+
+# Dependencies
+package-lock.json
+yarn.lock
+.pnpm-debug.log*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
