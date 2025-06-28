@@ -1,10 +1,35 @@
-frontend/node_modules
+
+
+.env
+node_modules
+
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Folders
+_obj
+_test
+vendor/
+
+# logs
+*.log
+
+*.exe
+*.out
+
+/bin/
+*.out
+/tmp
+
+client/node_modules
 .DS_Store
-frontend/dist
-frontend/dist-ssr
-frontend/*.local
-frontend/.env
-frontend/.output
-frontend/.vinxi
-frontend/.vscode
-frontend/.tanstack
+client/dist
+client/dist-ssr
+client/*.local
+client/.env
+client/.output
+client/.vinxi
+client/.vscode
+client/.tanstack
