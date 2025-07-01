@@ -1,10 +1,9 @@
 import { Outlet, HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import TanStackQueryLayout from "../tanstack-query/layout.tsx";
-
 import appCss from "../styles.css?url";
-
 import type { QueryClient } from "@tanstack/react-query";
+import { ThemeProvider } from "@/components/theme-provider.tsx";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -29,6 +28,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "icon",
+        href: "/logo-light.png",
+        type: "image/png",
+      },
     ],
   }),
 
@@ -49,7 +53,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          {children}
+        </ThemeProvider>
         <Scripts />
       </body>
     </html>
