@@ -4,6 +4,7 @@ import TanStackQueryLayout from "../tanstack-query/layout.tsx";
 import appCss from "../styles.css?url";
 import type { QueryClient } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/theme-provider.tsx";
+import { AuthProvider } from "@/lib/auth-context";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -20,7 +21,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Logcha - Time Tracking System",
       },
     ],
     links: [
@@ -54,7 +55,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </ThemeProvider>
         <Scripts />
       </body>
