@@ -22,7 +22,7 @@ A comprehensive time tracking application designed for companies to monitor and 
 ## Tech Stack
 
 ### Backend
-- **Framework**: Go 1.24.4 with Fiber v3 (beta)
+- **Framework**: Go 1.24.4 with Gin Web Framework
 - **Database**: PostgreSQL with GORM
 - **Authentication**: JWT-based auth with bcrypt password hashing
 - **Validation**: go-playground/validator for request validation

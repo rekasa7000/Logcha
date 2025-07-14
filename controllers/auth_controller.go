@@ -59,9 +59,12 @@ func (ac *AuthController) Register(c *gin.Context) {
 
     // Create user
     user := models.User{
-        Username: req.Username,
-        Email:    req.Email,
-        Password: hashedPassword,
+        Email:        req.Email,
+        PasswordHash: hashedPassword,
+        Role:         req.Role,
+        FirstName:    req.FirstName,
+        LastName:     req.LastName,
+        Phone:        req.Phone,
     }
 
     if err := database.DB.Create(&user).Error; err != nil {
@@ -82,9 +85,13 @@ func (ac *AuthController) Register(c *gin.Context) {
     c.JSON(http.StatusCreated, gin.H{
         "message": "User created successfully",
         "user": models.UserResponse{
-            ID:       user.ID,
-            Username: user.Username,
-            Email:    user.Email,
+            ID:        user.ID,
+            Email:     user.Email,
+            FirstName: user.FirstName,
+            LastName:  user.LastName,
+            Phone:     user.Phone,
+            Role:      user.Role,
+            IsActive:  user.IsActive,
         },
     })
 }
@@ -104,7 +111,7 @@ func (ac *AuthController) Login(c *gin.Context) {
     }
 
     // Check password
-    if !utils.CheckPassword(req.Password, user.Password) {
+    if !utils.CheckPassword(req.Password, user.PasswordHash) {
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
         return
     }
@@ -122,9 +129,13 @@ func (ac *AuthController) Login(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{
         "message": "Login successful",
         "user": models.UserResponse{
-            ID:       user.ID,
-            Username: user.Username,
-            Email:    user.Email,
+            ID:        user.ID,
+            Email:     user.Email,
+            FirstName: user.FirstName,
+            LastName:  user.LastName,
+            Phone:     user.Phone,
+            Role:      user.Role,
+            IsActive:  user.IsActive,
         },
     })
 }
