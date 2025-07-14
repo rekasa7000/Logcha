@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"gin/config"
+	"gin/models"
 	"log"
 
 	"gorm.io/driver/postgres"
