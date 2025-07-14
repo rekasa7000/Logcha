@@ -30,7 +30,6 @@ func (uc *UserController) GetProfile(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{
         "user": models.UserResponse{
             ID:       user.ID,
-            Username: user.Username,
             Email:    user.Email,
         },
     })
@@ -47,7 +46,6 @@ func (uc *UserController) GetUsers(c *gin.Context) {
     for _, user := range users {
         userResponses = append(userResponses, models.UserResponse{
             ID:       user.ID,
-            Username: user.Username,
             Email:    user.Email,
         })
     }

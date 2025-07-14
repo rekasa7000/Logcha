@@ -67,7 +67,7 @@ A comprehensive time tracking application designed for companies to monitor and 
    # Edit .env with your database credentials
    
    # Run database migrations
-   go run cmd/server/main.go
+   go run main.go
    ```
 
 3. Frontend setup:
@@ -110,71 +110,42 @@ ENVIRONMENT=development
 
 ```
 Logcha/
-├── cmd/
-│   └── server/
-│       └── main.go              # Application entry point
-├── internal/
-│   ├── config/
-│   │   └── config.go           # Configuration management
-│   ├── handlers/
-│   │   ├── auth_handler.go     # Authentication endpoints
-│   │   └── time_record_handler.go  # Time tracking endpoints
-│   ├── middleware/
-│   │   ├── auth.go             # JWT authentication middleware
-│   │   ├── cors.go             # CORS configuration
-│   │   └── logger.go           # Request logging
-│   ├── models/
-│   │   ├── user.go             # User model
-│   │   ├── company.go          # Company model
-│   │   ├── trainee.go          # Trainee model
-│   │   ├── time_record.go      # Time record model
-│   │   ├── weekly_summary.go   # Weekly summary model
-│   │   └── monthly_report.go   # Monthly report model
-│   ├── repository/
-│   │   ├── interfaces.go       # Repository interfaces
-│   │   ├── user_repository.go  # User data access
-│   │   ├── trainee_repository.go  # Trainee data access
-│   │   └── time_record_repository.go  # Time record data access
-│   ├── services/
-│   │   ├── auth_service.go     # Authentication business logic
-│   │   └── time_record_service.go  # Time tracking business logic
-│   └── utils/
-│       ├── hash.go             # Password hashing utilities
-│       ├── jwt.go              # JWT token management
-│       └── validation.go       # Input validation helpers
-├── pkg/
-│   └── database/
-│       └── postgres.go         # Database connection setup
-├── client/                     # Nuxt 3 frontend application
-│   ├── assets/
-│   │   └── css/
-│   │       └── main.css        # Global styles
-│   ├── composables/
-│   │   ├── useApi.ts           # API client composable
-│   │   └── useAuth.ts          # Authentication composable
-│   ├── layouts/
-│   │   └── default.vue         # Default layout component
-│   ├── middleware/
-│   │   ├── auth.ts             # Authentication middleware
-│   │   └── guest.ts            # Guest-only middleware
-│   ├── pages/
-│   │   ├── index.vue           # Landing page
-│   │   ├── login.vue           # Login page
-│   │   ├── register.vue        # Registration page
-│   │   └── dashboard.vue       # Main dashboard
-│   ├── plugins/
-│   │   └── api.client.ts       # API client plugin
-│   ├── nuxt.config.ts          # Nuxt configuration
-│   └── package.json            # Frontend dependencies
-├── docs/
-│   ├── DATABASE_SCHEME.md      # Complete database schema
-│   ├── DEVELOPMENT_GUIDE.md    # Go & Fiber development guide
-│   └── SETUP.md               # Detailed setup instructions
-├── go.mod                     # Go module definition
-├── go.sum                     # Go module checksums
-├── air.toml                   # Air configuration for hot reload
-├── bun.lock                   # Bun lockfile
-└── README.md                  # This file
+├── main.go                    # Application entry point
+├── config/
+│   └── config.go             # Configuration management
+├── controllers/
+│   ├── auth_controller.go    # Authentication endpoints
+│   ├── company_controller.go # Company management
+│   ├── trainee_controller.go # Trainee management
+│   ├── time_record_controller.go # Time tracking endpoints
+│   ├── user_controller.go    # User management
+│   └── reports_controller.go # Reports and analytics
+├── middleware/
+│   ├── auth_middleware.go    # JWT authentication middleware
+│   └── cors_middleware.go    # CORS configuration
+├── models/
+│   ├── user.go              # User model
+│   ├── company.go           # Company model
+│   ├── trainee.go           # Trainee model
+│   ├── time_record.go       # Time record model
+│   ├── weekly_summary.go    # Weekly summary model
+│   └── monthly_report.go    # Monthly report model
+├── services/
+│   └── time_calculation_service.go # Business logic for calculations
+├── routes/
+│   └── routes.go            # API route definitions
+├── database/
+│   └── database.go          # Database connection and migration
+├── utils/
+│   ├── jwt.go               # JWT token management
+│   └── password.go          # Password hashing utilities
+├── .env.example             # Environment variables template
+├── go.mod                   # Go module definition
+├── go.sum                   # Go module checksums
+├── DATABASE_SCHEME.md       # Complete database schema
+├── DEVELOPMENT_GUIDE.md     # Go & Gin development guide
+├── SETUP.md                 # Detailed setup instructions
+└── README.md                # This file
 ```
 
 ## API Documentation
@@ -184,18 +155,39 @@ The backend provides a RESTful API with the following main endpoints:
 ### Authentication
 - `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user info
+- `POST /api/auth/logout` - User logout
+
+### User Management
+- `GET /api/profile` - Get current user profile
+- `GET /api/users` - Get all users
+
+### Company Management
+- `POST /api/companies` - Create company
+- `GET /api/companies` - Get all companies
+- `GET /api/companies/:id` - Get company by ID
+- `PUT /api/companies/:id` - Update company
+- `DELETE /api/companies/:id` - Delete company
+
+### Trainee Management
+- `POST /api/trainees` - Create trainee
+- `GET /api/trainees` - Get all trainees (with filters)
+- `GET /api/trainees/:id` - Get trainee by ID
+- `PUT /api/trainees/:id` - Update trainee
+- `DELETE /api/trainees/:id` - Delete trainee
 
 ### Time Tracking
 - `POST /api/time-records` - Create time record
-- `GET /api/time-records` - Get time records
+- `GET /api/time-records` - Get time records (with filters)
+- `GET /api/time-records/:id` - Get time record by ID
 - `PUT /api/time-records/:id` - Update time record
 - `DELETE /api/time-records/:id` - Delete time record
 
 ### Reports
 - `GET /api/reports/weekly` - Weekly summary reports
 - `GET /api/reports/monthly` - Monthly DTR reports
-- `GET /api/reports/ojt-progress` - OJT progress tracking
+- `GET /api/reports/dtr` - Daily Time Record reports
+- `GET /api/reports/ojt-progress/:trainee_id` - OJT progress for specific trainee
+- `GET /api/reports/ojt-progress` - OJT progress for all trainees
 
 ## Database Schema
 
@@ -229,7 +221,7 @@ bun dev
 
 Backend:
 ```bash
-go build -o bin/server cmd/server/main.go
+go build -o bin/server main.go
 ```
 
 Frontend:
@@ -266,6 +258,6 @@ This project is designed to help companies efficiently track and manage intern a
 ## Support
 
 For questions or support, please check the documentation:
-- [Development Guide](DEVELOPMENT_GUIDE.md) - Complete Go & Fiber development guide
+- [Development Guide](DEVELOPMENT_GUIDE.md) - Complete Go & Gin development guide
 - [Database Schema](DATABASE_SCHEME.md) - Detailed database documentation
 - [Setup Instructions](SETUP.md) - Detailed setup guide
