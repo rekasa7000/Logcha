@@ -23,36 +23,30 @@ A comprehensive time tracking application designed for companies to monitor and 
 
 ## Tech Stack
 
-### Backend
+### Full Stack
 
-- **Framework**: Go 1.24.4 with Gin Web Framework
-- **Database**: PostgreSQL with GORM
-- **Authentication**: JWT-based auth with bcrypt password hashing
-- **Validation**: go-playground/validator for request validation
-- **Configuration**: Environment-based config with godotenv
-
-### Frontend
-
-- **Framework**: Nuxt 3.17.6 (Vue 3.5.17)
-- **UI Library**: Nuxt UI 3.2.0 with Tailwind CSS 4.0
-- **Authentication**: Sidebase Nuxt Auth
-- **State Management**: Composables-based approach
-- **HTTP Client**: Custom API composable with JWT handling
+- **Framework**: Next.js 15 with TypeScript and App Router
+- **Database**: Supabase PostgreSQL with Row Level Security
+- **Authentication**: Supabase Auth with JWT tokens
+- **UI Library**: Shadcn/UI with Tailwind CSS 4.0
+- **Form Handling**: React Hook Form with Zod validation
+- **State Management**: React Context and Supabase client
+- **Notifications**: Sonner for toast messages
 
 ### Development Tools
 
-- **Hot Reload**: Air for Go backend auto-restart
-- **Package Manager**: Bun for frontend dependencies
+- **Package Manager**: Bun for fast dependency management
+- **TypeScript**: Full type safety across the application
+- **ESLint**: Code quality and consistency
 - **Environment**: Development and production configurations
 
 ## Getting Started
 
 ### Prerequisites
 
-- Go 1.24.4 or higher
 - Node.js 18 or higher
-- PostgreSQL 15 or higher
 - Bun (recommended) or npm
+- Supabase account for database and authentication
 
 ### Installation
 
@@ -60,148 +54,128 @@ A comprehensive time tracking application designed for companies to monitor and 
 
    ```bash
    git clone https://github.com/rekasa7000/Logcha.git
-   cd Logcha
+   cd logcha
    ```
 
-2. Backend setup:
+2. Install dependencies:
 
    ```bash
-   # Install Go dependencies
-   go mod tidy
-
-   # Set up environment variables
-   cp .env.example .env
-   # Edit .env with your database credentials
-
-   # Run database migrations
-   go run main.go
-   ```
-
-3. Frontend setup:
-
-   ```bash
-   cd client
-
-   # Install dependencies
    bun install
    # or npm install
+   ```
 
-   # Start development server
+3. Set up environment variables:
+
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your Supabase credentials
+   ```
+
+4. Set up Supabase:
+
+   - Create a new Supabase project at [supabase.com](https://supabase.com)
+   - Copy your project URL and anon key to `.env.local`
+   - Run the SQL migration in `supabase-migration.sql` in your Supabase SQL editor
+   - Run the admin seeder script: `bun run seed:admin`
+
+5. Start the development server:
+
+   ```bash
    bun dev
    # or npm run dev
    ```
 
 ### Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env.local` file in the root directory:
 
 ```env
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=logcha
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-# JWT
-JWT_SECRET=your_super_secret_jwt_key
-
-# Server
-PORT=8080
-API_BASE_URL=http://localhost:8080
-
-# Environment
-ENVIRONMENT=development
+# Optional: For server-side operations
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 ```
 
 ## Project Structure
 
 ```
-Logcha/
-├── main.go                    # Application entry point
-├── config/
-│   └── config.go             # Configuration management
-├── controllers/
-│   ├── auth_controller.go    # Authentication endpoints
-│   ├── company_controller.go # Company management
-│   ├── trainee_controller.go # Trainee management
-│   ├── time_record_controller.go # Time tracking endpoints
-│   ├── user_controller.go    # User management
-│   └── reports_controller.go # Reports and analytics
-├── middleware/
-│   ├── auth_middleware.go    # JWT authentication middleware
-│   └── cors_middleware.go    # CORS configuration
-├── models/
-│   ├── user.go              # User model
-│   ├── company.go           # Company model
-│   ├── trainee.go           # Trainee model
-│   ├── time_record.go       # Time record model
-│   ├── weekly_summary.go    # Weekly summary model
-│   └── monthly_report.go    # Monthly report model
-├── services/
-│   └── time_calculation_service.go # Business logic for calculations
-├── routes/
-│   └── routes.go            # API route definitions
-├── database/
-│   └── database.go          # Database connection and migration
-├── utils/
-│   ├── jwt.go               # JWT token management
-│   └── password.go          # Password hashing utilities
-├── .env.example             # Environment variables template
-├── go.mod                   # Go module definition
-├── go.sum                   # Go module checksums
-├── DATABASE_SCHEME.md       # Complete database schema
-├── DEVELOPMENT_GUIDE.md     # Go & Gin development guide
-├── SETUP.md                 # Detailed setup instructions
-└── README.md                # This file
+logcha/
+├── app/                          # Next.js app directory
+│   ├── auth/                     # Authentication pages
+│   │   ├── login/page.tsx        # Login page
+│   │   └── register/page.tsx     # Register page
+│   ├── dashboard/                # Protected dashboard area
+│   │   ├── companies/page.tsx    # Company management
+│   │   ├── trainees/page.tsx     # Trainee management (planned)
+│   │   ├── time-records/page.tsx # Time tracking (planned)
+│   │   └── page.tsx             # Main dashboard
+│   ├── layout.tsx               # Root layout with providers
+│   ├── page.tsx                 # Home page with auth redirect
+│   └── globals.css              # Global styles
+├── components/                   # Reusable React components
+│   ├── ui/                      # Shadcn UI components
+│   ├── company-dialog.tsx       # Company form dialog
+│   └── protected-route.tsx      # Route protection wrapper
+├── lib/                         # Utility libraries
+│   ├── auth-context.tsx         # Authentication context
+│   ├── supabase.ts             # Supabase client configuration
+│   ├── types.ts                # TypeScript type definitions
+│   ├── validations.ts          # Zod validation schemas
+│   └── utils.ts                # Utility functions
+├── scripts/                     # Utility scripts
+│   └── seed-admin.ts           # Admin user seeder
+├── supabase-migration.sql       # Database schema migration
+├── .env.example                # Environment variables template
+├── .env.local                  # Local environment variables (gitignored)
+├── components.json             # Shadcn UI configuration
+├── package.json                # Node.js dependencies
+├── tsconfig.json               # TypeScript configuration
+├── tailwind.config.ts          # Tailwind CSS configuration
+├── next.config.ts              # Next.js configuration
+├── DATABASE_SCHEME.md          # Complete database schema
+└── README.md                   # This file
 ```
 
-## API Documentation
+## Application Features
 
-The backend provides a RESTful API with the following main endpoints:
+The application provides comprehensive time tracking capabilities through a modern web interface:
 
-### Authentication
+### Authentication & Authorization
 
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
+- **Supabase Auth**: Secure user authentication with email/password
+- **Role-based Access**: Separate interfaces for company admins and trainees
+- **Row Level Security**: Database-level security policies for data protection
 
-### User Management
+### Company Management (Admin Only)
 
-- `GET /api/profile` - Get current user profile
-- `GET /api/users` - Get all users
+- Create and manage multiple companies
+- Company profile with contact information and address
+- Company-specific trainee management
 
-### Company Management
+### Trainee Management (Planned)
 
-- `POST /api/companies` - Create company
-- `GET /api/companies` - Get all companies
-- `GET /api/companies/:id` - Get company by ID
-- `PUT /api/companies/:id` - Update company
-- `DELETE /api/companies/:id` - Delete company
+- Support for three trainee types:
+  - **Paid Interns**: With hourly rates and weekly hour caps
+  - **Unpaid Interns**: Hour tracking with weekly limits
+  - **OJT Students**: Total required hours with progress tracking
+- Individual trainee profiles with school and course information
+- Flexible start/end dates and status management
 
-### Trainee Management
+### Time Tracking (Planned)
 
-- `POST /api/trainees` - Create trainee
-- `GET /api/trainees` - Get all trainees (with filters)
-- `GET /api/trainees/:id` - Get trainee by ID
-- `PUT /api/trainees/:id` - Update trainee
-- `DELETE /api/trainees/:id` - Delete trainee
+- **AM/PM Sessions**: Separate morning and afternoon time entries
+- **Automatic Calculations**: Real-time hour calculations with generated columns
+- **Validation**: Business rule enforcement (time logic, date restrictions)
+- **Status Tracking**: Present, absent, half-day options
 
-### Time Tracking
+### Reporting & Analytics (Planned)
 
-- `POST /api/time-records` - Create time record
-- `GET /api/time-records` - Get time records (with filters)
-- `GET /api/time-records/:id` - Get time record by ID
-- `PUT /api/time-records/:id` - Update time record
-- `DELETE /api/time-records/:id` - Delete time record
-
-### Reports
-
-- `GET /api/reports/weekly` - Weekly summary reports
-- `GET /api/reports/monthly` - Monthly DTR reports
-- `GET /api/reports/dtr` - Daily Time Record reports
-- `GET /api/reports/ojt-progress/:trainee_id` - OJT progress for specific trainee
-- `GET /api/reports/ojt-progress` - OJT progress for all trainees
+- **Weekly Summaries**: Automated weekly hour calculations with payroll
+- **Monthly Reports**: Comprehensive DTR (Daily Time Record) reports
+- **OJT Progress**: Visual progress tracking for required hours
+- **Export Capabilities**: PDF and CSV export options
 
 ## Database Schema
 
@@ -218,50 +192,39 @@ For complete database schema details, see [DATABASE_SCHEME.md](DATABASE_SCHEME.m
 
 ## Development
 
-### Running with Hot Reload
+### Available Scripts
 
-Backend (with Air):
-
-```bash
-air
-```
-
-Frontend:
-
-```bash
-cd client
-bun dev
-```
+- `bun dev` - Start the development server with hot reload
+- `bun build` - Build the application for production
+- `bun start` - Start the production server
+- `bun lint` - Run ESLint for code quality checks
+- `bun run seed:admin` - Seed the database with an admin user
 
 ### Building for Production
 
-Backend:
-
 ```bash
-go build -o bin/server main.go
-```
-
-Frontend:
-
-```bash
-cd client
+# Build the application
 bun build
+
+# Start the production server
+bun start
 ```
 
-### Testing
+### Database Management
 
-Run Go tests:
+The application uses Supabase for database management:
 
-```bash
-go test ./...
-```
+- **Schema Migration**: Run `supabase-migration.sql` in your Supabase SQL editor
+- **Row Level Security**: Policies are automatically applied for data protection
+- **Real-time Updates**: Supabase provides real-time subscriptions for live data updates
 
-Run with coverage:
+### Development Workflow
 
-```bash
-go test -coverprofile=coverage.out ./...
-go tool cover -html=coverage.out
-```
+1. Make your changes to the codebase
+2. Test locally with `bun dev`
+3. Run linting with `bun lint`
+4. Test database changes in your Supabase project
+5. Commit your changes with clear commit messages
 
 ## Contributing
 
@@ -279,6 +242,7 @@ This project is designed to help companies efficiently track and manage intern a
 
 For questions or support, please check the documentation:
 
-- [Development Guide](DEVELOPMENT_GUIDE.md) - Complete Go & Gin development guide
-- [Database Schema](DATABASE_SCHEME.md) - Detailed database documentation
-- [Setup Instructions](SETUP.md) - Detailed setup guide
+- [Database Schema](DATABASE_SCHEME.md) - Complete database schema and business logic
+- [Supabase Documentation](https://supabase.com/docs) - For database and authentication help
+- [Next.js Documentation](https://nextjs.org/docs) - For framework-specific questions
+- [Shadcn/UI Documentation](https://ui.shadcn.com) - For UI component usage
